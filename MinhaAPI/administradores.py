@@ -4,9 +4,13 @@ app = Flask(__name__)
 
 admins = [
     {
-        'id': 1,
-        'Name': 'Real',
-        'Password': 'Madrid'
+        'id'        : 1,
+        'email'     : 'santos@gmail.com',
+        'password'  : 'santos1234',
+        'status'    : 'inativo',
+        'type'      : 'vendedor',
+        'date'      : '02/05/2002',
+        'area'      : 'Real Madrid'
     }
 ]
 
@@ -16,16 +20,16 @@ def login_usuario():
     
     data = request.get_json()
     
-    name = data.get('Name')
-    password = data.get('Password')
+    name = data.get('name')
+    password = data.get('password')
 
     for admin in admins:
-        if admin['Name'] == name and admin['Password'] == password:
+        if admin['name'] == name and admin['password'] == password:
             
             response = {
                 'message': 'Login bem-sucedido',
                 'id': admin['id'],
-                'Name': admin['Name']
+                'name': admin['name']
             }
             
             return jsonify(response), 200
