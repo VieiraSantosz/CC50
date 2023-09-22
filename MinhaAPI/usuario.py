@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 
 app = Flask(__name__)
 
@@ -31,16 +31,16 @@ users = [
 ]
 
 
-### METÓDO GET PARA LISTAR USUÁRIOS ###
-@app.route('/users', methods=['GET'])
-def mostrar_usuario():
-    return jsonify(users)
-########################################
-
-
 ### METÓDO GET PARA LISTAR USUÁRIOS POR ID ###
 @app.route('/users/<int:id>', methods=['GET'])
 def mostrar_usuario_por_id(id):
+    
+    if 'name' not in session:
+        response = {
+            'message': 'Realize o Login primeiro!'
+        }
+        return jsonify(response)
+    
     
     for user in users:
         if user.get('id') == id:
@@ -51,10 +51,18 @@ def mostrar_usuario_por_id(id):
 ### METÓDO PUT PARA EDITAR USUÁRIOS ###
 @app.route('/users/<int:id>', methods=['PUT'])
 def editar_usuario(id):
+    
+    if 'name' not in session:
+        response = {
+            'message': 'Realize o Login primeiro!'
+        }
+        return jsonify(response)
+    
     editar_user = request.get_json()
     
     for i, novoUser in enumerate(users):
         if novoUser.get('id') == id:
+            
             users[i].update(editar_user)
             return jsonify(users[i])
 ########################################
@@ -64,24 +72,28 @@ def editar_usuario(id):
 @app.route('/users/login', methods=['POST'])
 def login_usuario():
     
-    data = request.get_json()
+    login = request.get_json()
     
-    name = data.get('name')
-    password = data.get('password')
+    usuario     = login.get('name')
+    senha       = login.get('password')
 
-    for user in users:
-        if user['name'] == name and user['password'] == password:
+    for i in users:
+        if i['name'] == usuario and i['password'] == senha:
+            
+            session['name'] = usuario
             
             response = {
-                'message': 'Login bem-sucedido',
-                'id': user['id'],
-                'name': user['name']
+                'id'        : i['id'],
+                'name'      : i['name'],
+                'message'   : 'Login Feito com Sucesso!'
             }
-            
-            return jsonify(response), 200
-
-    response = {'message': 'Credenciais inválidas'}
-    return jsonify(response), 401
+            return jsonify(response)
+        
+        
+        response = {
+            'message': 'Credenciais Inválidas!'
+        }
+        return jsonify(response)
 ########################################  
 
 
@@ -89,14 +101,26 @@ def login_usuario():
 @app.route('/users/logout', methods=['POST'])
 def logout_usuario():
     
+    if 'name' in session:
+        
+        session.pop('name', None)
+        response = {
+            'message': 'Usuário acabou de sair da sessão!'
+        }
+        return jsonify(response)
     
-    return "Usuário acabou de sair da sessão!"
+    else:
+        response = {
+            'message': 'Nenhum Usuário logado!'
+        }
+        return jsonify(response)
 ######################################## 
 
 
 ### METÓDO POST PARA CRIAR / REGISTRAR USUÁRIOS ###
 @app.route('/users/signup', methods=['POST'])
 def criar_usuario():
+    
     novo_user = request.get_json()
     
     users.append(novo_user)
@@ -108,6 +132,12 @@ def criar_usuario():
 @app.route('/users/<int:id>', methods=['DELETE'])
 def excluir_usuario(id):
     
+    if 'name' not in session:
+        response = {
+            'message': 'Realize o Login primeiro!'
+        }
+        return jsonify(response)
+    
     for i, delUser in enumerate(users):
         if delUser.get('id') == id:
             del users[i]
@@ -115,5 +145,5 @@ def excluir_usuario(id):
     return jsonify(users)
 ########################################     
 
-
+app.secret_key = 'chave_secreta'
 app.run(port=5000, host='localhost', debug=True)

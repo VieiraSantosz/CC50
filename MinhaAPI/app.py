@@ -1,9 +1,3 @@
-#Endpoints:
-#• POST /users/signup    - Registro do usuário.
-#• POST /users/login     - Autenticação do usuário.
-#• PUT /users/{id}       - Editar informações do usuário.
-#• DELETE /users/{id}    - Desativar um usuário (soft delete).
-
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
