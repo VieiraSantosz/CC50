@@ -36,6 +36,13 @@ conexao = mysql.connector.connect(
     database='banco de dados',
 )
 
+if conexao.is_connected():
+    print("Conexão ao MySQL bem-sucedida!")
+else:
+    print("Não foi possível conectar com o MySql!!")
+# Feche a conexão quando terminar de usá-la
+conexao.close()
+
 cursor = conexao.cursor()
 
 
