@@ -42,7 +42,6 @@ if conexao.is_connected():
 else:
     print("Não foi possível conectar com o MySql!!")
     
-conexao.close()
 
 
 ### ADICIONA AS INFO NO BANCO DE DADOS ###

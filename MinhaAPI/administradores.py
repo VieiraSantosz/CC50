@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, session
 
 app = Flask(__name__)
+app.secret_key = 'chave_secreta'
 
 admins = [
     {
@@ -40,6 +41,14 @@ users = [
         'status'    : 'ativo',
         'type'      : 'administrador'
     },
+]
+
+reports = [
+    {
+        'users'         : 5,
+        'ativos'        : 3,
+        'relatorios'    :'relatórios tudo ok e listando!'
+    }
 ]
 
 
@@ -104,7 +113,20 @@ def mostrar_usuario():
     
     return jsonify(users)
 ########################################
+
+
+### METÓDO GET PARA LISTAR RELATÓRIOS E ESTATÍSTICAS ###
+@app.route('/admin/reports', methods=['GET'])
+def mostrar_relatorios_estatisticas():
+    
+    if 'name' not in session:
+        response = {
+            'message': 'Realize o Login primeiro!'
+        }
+        return jsonify(response)
+    
+    return jsonify(reports)
+########################################
  
 
-app.secret_key = 'chave_secreta'
 app.run(port=5000, host='localhost', debug=True)

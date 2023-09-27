@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, session
 
 app = Flask(__name__)
-
+app.secret_key = 'chave_secreta'
 
 users = [
     {
@@ -29,23 +29,6 @@ users = [
         'type'      : 'administrador'
     },
 ]
-
-
-### METÓDO GET PARA LISTAR USUÁRIOS POR ID ###
-@app.route('/users/<int:id>', methods=['GET'])
-def mostrar_usuario_por_id(id):
-    
-    if 'name' not in session:
-        response = {
-            'message': 'Realize o Login primeiro!'
-        }
-        return jsonify(response)
-    
-    
-    for user in users:
-        if user.get('id') == id:
-            return jsonify(user)
-##############################################
 
 
 ### METÓDO PUT PARA EDITAR USUÁRIOS ###
@@ -145,5 +128,5 @@ def excluir_usuario(id):
     return jsonify(users)
 ########################################     
 
-app.secret_key = 'chave_secreta'
+
 app.run(port=5000, host='localhost', debug=True)
