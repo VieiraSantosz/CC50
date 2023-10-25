@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+    </head>
+
+    <body>
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+
+                <h3> Qual o maior jogador de todos os tempos pelo Real Madrid? </h3>
+
+                <button  class="resposta" data-correct="false"> Karim Benzema </button>
+                <button  class="resposta" data-correct="true"> Cristiano Ronaldo </button>
+                <button  class="resposta" data-correct="false"> Marcelo Vieira </button>
+                <button  class="resposta" data-correct="false"> Zinédine Zidane </button>
+                <div id="feedback1"></div>
+
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+
+                <h3> Qual time ganhou mais vezes a Champions? <h3>
+                <input id="time" type="text">   
+                <button id="submit" type="submit"> Verificar Resposta! </button>
+                <div id="feedback2"></div>
+
+            </div>
+
+            <div class="section">
+                <h2>Part 3: Link</h2>
+                <hr>
+
+                <h3> Maior Hino de todos os tempos! <h3>
+                <a href="https://www.youtube.com/watch?v=mLQhZPaDsqs"> Seja Feliz :)!</a>
+
+            </div>
+
+        </div>
+
+        <script>
+
+            let buttons     = document.querySelectorAll('.resposta');
+            let feedback1   = document.getElementById('feedback1');
+    
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const isCorrect = button.getAttribute('data-correct') === 'true';
+    
+                    if (isCorrect) {
+                        button.classList.add('correct');
+                        feedback1.textContent = 'Correto!';
+                        
+                    } else {
+                        button.classList.add('incorrect');
+                        feedback1.textContent = 'Incorreto';
+                    }
+    
+                    // Desativar os botões após a seleção
+                    buttons.forEach(b => b.disabled = true);
+                });
+            });
+
+        </script>
+
+        <script>
+
+            let submitButton      = document.getElementById('submit');
+            let answerInput       = document.getElementById('time');
+            let feedback2         = document.getElementById('feedback2');
+
+            submitButton.addEventListener('click', function() {
+
+                let userAnswer      = answerInput.value.trim().toLowerCase();
+                let correctAnswer   = 'real madrid';
+
+
+                if (userAnswer == correctAnswer) {
+                    feedback2.textContent = 'Correto!';
+
+                } else {
+                    feedback2.textContent = 'Incorreto, tente novamente!';
+                }
+
+            });
+            
+    </script>
+
+    </body>
+</html>
